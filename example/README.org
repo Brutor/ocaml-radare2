@@ -1,0 +1,19 @@
+#+TITLE: README
+
+Run OCaml program from Radare2 with ~#!pipe~
+
+* Sources
+
++ [[https://medium.com/@trufae/scripting-r2-with-pipes-47a7e14c50aa][Scripting r2 with pipes by pancake]]
+
+* Build file
+
+#+BEGIN_SRC sh
+ocamlbuild example.byte -pkg radare2
+#+END_SRC
+
+* Run example
+
+#+BEGIN_SRC r2
+radare2 -i example.r2 --
+#+END_SRC

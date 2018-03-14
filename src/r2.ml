@@ -32,6 +32,17 @@ let command_json ~r2 cmd =
     raise (Invalid_argument "Output wasn't JSON parsable, \
                              make sure you used /j")
 
+let fd_of_int (x: int) : Unix.file_descr = Obj.magic x
+let of_pipe () =
+  let get_pipe env_var = Sys.getenv env_var |> int_of_string |> fd_of_int in
+  try
+    let in_pipe = get_pipe "R2PIPE_IN"
+    and out_pipe = get_pipe "R2PIPE_OUT"
+    and pid = Unix.getppid () in
+    { pid; read_from = in_pipe; write_to = out_pipe}
+  with Not_found ->
+    failwith "Program is not run from R2"
+
 let open_file f_name =
   if not (Sys.file_exists f_name) then
     raise (Invalid_argument "Non-existent file")
@@ -49,7 +60,7 @@ let open_file f_name =
 (* Heavy handed but we ensure that r2 is killed *)
 let close {pid; _} =
   Unix.kill pid Sys.sigkill;
-  Unix.waitpid [] pid;
+  ignore (Unix.waitpid [] pid);
   ()
 
 let with_command ~cmd f_name =

@@ -15,6 +15,10 @@ val command_json : r2:r2 -> string -> Yojson.Basic.json
     if file doesn't exists *)
 val open_file : string -> r2
 
+(** Get a r2 instance handler from the parent r2 process,
+    throws if program not launched from r2 *)
+val of_pipe : unit -> r2
+
 (** close a r2 instance *)
 val close : r2 -> unit
 
