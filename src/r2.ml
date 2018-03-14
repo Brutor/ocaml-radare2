@@ -1,4 +1,4 @@
-type r2 =
+type t =
   {pid : int; read_from : Unix.file_descr; write_to : Unix.file_descr}
 
 exception Stop_read
